@@ -1,5 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h2 Your New Project Name
+  h1 #{project.dashed}
+
+  #{pastProjects}
+
+  h2 Last 10 Names
+  ul
+    each value in pastProjects
+      li= value
