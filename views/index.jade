@@ -1,12 +1,14 @@
 extends layout
 
 block content
-  h2 Your New Project Name
-  h1 #{project.dashed}
+  .rounded-lg.px-4.py-12.bg-white.shadow-lg.max-w-sm
+    .py-8
+      a(
+      class="border-blue-dark border-b border-solid no-underline text-blue-dark text-5xl"
+      href="https://github.com/new"
+      target="_blank"
+      ) #{project.dashed}
 
-  #{pastProjects}
-
-  h2 Last 10 Names
-  ul
-    each value in pastProjects
-      li= value
+    ul.list-reset
+      each value in pastProjects
+        li.py-2.text-blue-darkest.text-xl #{value}
