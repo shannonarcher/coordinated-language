@@ -22,6 +22,7 @@ router.get('/', function(req, res, next) {
   ].slice(0, 11)));
 
   res.render('index', {
+    title: 'Heroku-style Project Name Generation',
     project,
     pastProjects,
   });
