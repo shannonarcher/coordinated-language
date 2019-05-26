@@ -2,12 +2,29 @@ extends layout
 
 block content
   .rounded-lg.px-4.py-12.bg-white.shadow-lg.flex-1.w-full
-    .py-8.flex.text-blue-dark.text-5xl.font-light
-      a(
-        class="no-underline w-full"
-        href="https://github.com/new"
-        target="_blank"
-      ) #{project}
+    .py-8.flex.text-blue-dark.text-4xl.font-light
+      .w-full.flex.flex-row
+        form(
+          action="toggle-lock/adjective/#{adjective}",
+          method="post"
+          class="flex flex-row"
+        )
+          button.flex.flex-row.text-blue-dark
+            if adjectiveLocked
+              🔒#{adjective}
+            else
+              🔓#{adjective}
+        span -
+        form(
+          action="toggle-lock/noun/#{noun}"
+          method="post"
+          class="flex flex-row"
+        )
+          button.flex.flex-row.text-blue-dark
+            if nounLocked
+              🔒#{noun}
+            else
+              🔓#{noun}
 
       a(
         class="no-underline"
