@@ -8,17 +8,25 @@ router.get('/', function(req, res, next) {
   const cookies = new Cookies(req, res);
   let pastProjects = getPastProjects(cookies);
   const favourites = getFavourites(cookies);
+  const [adjectiveLocked, nounLocked] = getLocks(cookies);
 
-  const isRedirect = cookies.get('redirect');
-  cookies.set('redirect', false);
+  const isRedirect = getRedirect(cookies);
+  setCookie('redirect', false, cookies);
 
   let project;
   if (!isRedirect) {
     project = generate().dashed;
-    cookies.set('past-projects', JSON.stringify([
-      project,
-      ...pastProjects,
-    ].slice(0, 11)));
+    const [adjective, noun] = project.split('-');
+    project = `${adjectiveLocked || adjective}-${nounLocked || noun}`;
+
+    setCookie(
+      'past-projects', 
+      [
+        project,
+        ...pastProjects,
+      ].slice(0, 11),
+      cookies
+    );
   } else {
     project = pastProjects[0];
     pastProjects = pastProjects.slice(1, 11);
@@ -37,9 +45,15 @@ router.get('/', function(req, res, next) {
       })),
   ];
 
+  const [adjective, noun] = project.split('-');
+
   res.render('index', {
     title: 'Heroku-style Project Name Generation',
     project,
+    adjective,
+    adjectiveLocked,
+    noun,
+    nounLocked,
     projects,
   });
 });
@@ -50,11 +64,15 @@ router.post('/favourite/', function(req, res) {
   const cookies = new Cookies(req, res);
   const favourites = getFavourites(cookies);
 
-  cookies.set('favourites', JSON.stringify([
-    ...favourites,
-    project,
-  ]));  
-  cookies.set('redirect', true);
+  setCookie(
+    'favourites',
+    [
+      ...favourites,
+      project,
+    ],
+    cookies,
+  );
+  setCookie('redirect', true, cookies);
   
   res.redirect('/');
 });
@@ -65,28 +83,44 @@ router.post('/unfavourite/', function(req, res) {
   const cookies = new Cookies(req, res);
   const favourites = getFavourites(cookies);
 
-  cookies.set('favourites', JSON.stringify(
-    favourites.filter((name) => name !== project),
-  )); 
-  console.log(favourites, project);
-  cookies.set('redirect', true);
+  setCookie('favourites', favourites.filter((name) => name !== project), cookies);
+  setCookie('redirect', true, cookies);
   
   res.redirect('/');
 });
 
-function getPastProjects(cookies) {
-  try {
-    return JSON.parse(cookies.get('past-projects'));
-  } catch {
-    return [];
-  }
+router.post('/toggle-lock/:type/:word', function(req, res) {
+  const { type, word } = req.params;
+  const cookies = new Cookies(req, res);
+  const [adjectiveLocked, nounLocked] = getLocks(cookies);
+
+  setCookie('locks', [
+    type === 'adjective' && !adjectiveLocked ? word : '',
+    type === 'noun' && !nounLocked ? word : '',
+  ], cookies);
+  setCookie('redirect', true, cookies);
+
+  res.redirect('/');
+});
+
+const getPastProjects = partialize(getCookie, 'past-projects', []);
+const getFavourites = partialize(getCookie, 'favourites', []);
+const getLocks = partialize(getCookie, 'locks', ['', '']);
+const getRedirect = partialize(getCookie, 'redirect', false);
+
+function partialize(fn, ...args) {
+  return (...otherArgs) => fn(...args, ...otherArgs);
 }
 
-function getFavourites(cookies) {
+function getCookie(name, defaultValue, cookies) {
   try {
-    return JSON.parse(cookies.get('favourites'));
-  } catch { }
-  return [];
+    return JSON.parse(cookies.get(name));
+  } catch {};
+  return defaultValue;
+}
+
+function setCookie(name, value, cookies) {
+  cookies.set(name, JSON.stringify(value));
 }
 
 module.exports = router;
