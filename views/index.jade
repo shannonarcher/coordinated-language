@@ -2,13 +2,49 @@ extends layout
 
 block content
   .rounded-lg.px-4.py-12.bg-white.shadow-lg.flex-1.w-full
-    .py-8
+    .py-8.flex.text-blue-dark.text-5xl.font-light
       a(
-      class="border-blue-dark border-b border-solid no-underline text-blue-dark text-5xl font-light"
-      href="https://github.com/new"
-      target="_blank"
-      ) #{project.dashed}
+        class="no-underline w-full"
+        href="https://github.com/new"
+        target="_blank"
+      ) #{project}
+
+      a(
+        class="no-underline"
+        href="/"
+      ) ↩︎
+
 
     ul.list-reset 
-      each value in pastProjects
-        li.py-2.text-blue-darkest.text-xl.font-light #{value}
+      each value in projects
+        li(
+          class="py-2 text-blue-darkest text-xl font-light flex"
+        ) 
+          span.w-full #{value.name}
+          if value.isFavourite
+            form(
+              class="flex-end"
+              action="unfavourite",
+              method="post"
+            )
+              input(
+                type="hidden"
+                name="project"
+                value="#{value.name}"
+              )
+              button.favourite-button 👎
+          else
+            form(
+              action="favourite"
+              method="post"
+            )
+              input(
+                type="hidden"
+                name="project"
+                value="#{value.name}"
+              )
+              button.favourite-button 😍
+
+    script(
+      src="scripts/app.js"
+    )
