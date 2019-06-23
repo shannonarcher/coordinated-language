@@ -7,6 +7,7 @@ block content
         class="no-underline w-full"
         href="https://github.com/new"
         target="_blank"
+        data-qa="generation"
       ) #{project}
 
       a(
@@ -15,7 +16,9 @@ block content
       ) ↩︎
 
 
-    ul.list-reset 
+    ul.list-reset(
+      data-qa="generation-list"
+    )
       each value in projects
         li(
           class="py-2 text-blue-darkest text-xl font-light flex"

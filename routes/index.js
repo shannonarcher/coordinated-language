@@ -18,10 +18,10 @@ router.get('/', function(req, res, next) {
     cookies.set('past-projects', JSON.stringify([
       project,
       ...pastProjects,
-    ].slice(0, 11)));
+    ].slice(0, 10)));
   } else {
     project = pastProjects[0];
-    pastProjects = pastProjects.slice(1, 11);
+    pastProjects = pastProjects.slice(1, 10);
   }
 
   projects = [
