@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
       [
         project,
         ...pastProjects,
-      ].slice(0, 11),
+      ].slice(0, 10),
       cookies
     );
   } else {
