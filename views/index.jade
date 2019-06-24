@@ -8,6 +8,7 @@ block content
           action="toggle-lock/adjective/#{adjective}",
           method="post"
           class="flex flex-row"
+          data-cy="adjective"
         )
           button.flex.flex-row.text-blue-dark
             if adjectiveLocked
@@ -19,6 +20,7 @@ block content
           action="toggle-lock/noun/#{noun}"
           method="post"
           class="flex flex-row"
+          data-cy="noun"
         )
           button.flex.flex-row.text-blue-dark
             if nounLocked
@@ -29,11 +31,12 @@ block content
       a(
         class="no-underline"
         href="/"
+        data-cy="reload"
       ) ↩︎
 
 
     ul.list-reset(
-      data-qa="generation-list"
+      data-cy="generation-list"
     )
       each value in projects
         li(
@@ -45,6 +48,7 @@ block content
               class="flex-end"
               action="unfavourite",
               method="post"
+              data-cy="unfavourite-form-#{value.name}"
             )
               input(
                 type="hidden"
@@ -56,6 +60,7 @@ block content
             form(
               action="favourite"
               method="post"
+              data-cy="favourite-form-#{value.name}"
             )
               input(
                 type="hidden"

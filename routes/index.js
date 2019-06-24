@@ -24,13 +24,15 @@ router.get('/', function(req, res, next) {
       [
         project,
         ...pastProjects,
-      ].slice(0, 10),
+      ].slice(0, 11),
       cookies
     );
   } else {
     project = pastProjects[0];
-    pastProjects = pastProjects.slice(1, 10);
+    pastProjects = pastProjects.slice(1);
   }
+
+  pastProjects = pastProjects.slice(0, 10);
 
   projects = [
     ...pastProjects.map((name) => ({
@@ -120,6 +122,7 @@ function getCookie(name, defaultValue, cookies) {
 }
 
 function setCookie(name, value, cookies) {
+  console.log(name, value);
   cookies.set(name, JSON.stringify(value));
 }
 
