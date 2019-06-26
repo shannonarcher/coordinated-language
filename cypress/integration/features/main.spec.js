@@ -1,6 +1,6 @@
 context('Generate Project Name', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000');
+        cy.visit('/');
 
         cy.get('[data-cy=adjective]').as('adj');
         cy.get('[data-cy=noun]').as('noun');
