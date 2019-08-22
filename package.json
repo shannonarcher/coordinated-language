@@ -20,7 +20,7 @@
     "uglifycss": "0.0.29"
   },
   "devDependencies": {
-    "cypress": "^3.3.1",
+    "cypress": "^3.4.1",
     "nodemon": "^1.18.11"
   }
 }
